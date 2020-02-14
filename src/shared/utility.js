@@ -13,7 +13,7 @@ export const updateObject = (oldObject, updatedProperties) => {
   return updatedObject;
 };
 
-export const isEmpty = str => !str || str.trim() === '';
+export const isEmpty = str => !str || str.trim() === "";
 
 // export const sendHttpRequest = (path, method, headers, body) => {
 //     console.log("Request:", {path, method, headers, body});
@@ -42,4 +42,4 @@ export const isSuccessful = httpResponse => (
   httpResponse[0] >= 200
   && httpResponse[0] < 300);
 
-export const addTokenPrefix = token => 'Bearer ' + token;
+export const addTokenPrefix = token => "Bearer " + token;

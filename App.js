@@ -6,84 +6,38 @@
  * @flow
  */
 
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React from "react";
+import {Text, View} from "react-native";
+import {Router, Scene} from "react-native-router-flux";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {Provider} from 'react-redux';
-import {createStore} from 'redux';
-import {setStore} from './src/shared/utility';
-import rootReducer from './src/store/reducers';
+import {Provider} from "react-redux";
+import {createStore} from "redux";
 
-// const App: () => React$Node = () => {
-//   return (
-//     <>
-//       <StatusBar barStyle="dark-content" />
-//       <SafeAreaView>
-//         <ScrollView
-//           contentInsetAdjustmentBehavior="automatic"
-//           style={styles.scrollView}>
-//           <Header />
-//           {global.HermesInternal == null ? null : (
-//             <View style={styles.engine}>
-//               <Text style={styles.footer}>Engine: Hermes</Text>
-//             </View>
-//           )}
-//           <View style={styles.body}>
-//             <View style={styles.sectionContainer}>
-//               <Text style={styles.sectionTitle}>Step One</Text>
-//               <Text style={styles.sectionDescription}>
-//                 Edit <Text style={styles.highlight}>App.js</Text> to change
-// this screen and then come back to see your edits. </Text> </View> <View
-// style={styles.sectionContainer}> <Text style={styles.sectionTitle}>See Your
-// Changes</Text> <Text style={styles.sectionDescription}> <ReloadInstructions
-// /> </Text> </View> <View style={styles.sectionContainer}> <Text
-// style={styles.sectionTitle}>Debug</Text> <Text
-// style={styles.sectionDescription}> <DebugInstructions /> </Text> </View>
-// <View style={styles.sectionContainer}> <Text
-// style={styles.sectionTitle}>Learn More</Text> <Text
-// style={styles.sectionDescription}> Read the docs to discover what to do
-// next: </Text> </View> <LearnMoreLinks /> </View> </ScrollView>
-// </SafeAreaView> </> ); };
+import ChatsScreen from "./src/Screens/ChatsScreen";
+import PeopleScreen from "./src/Screens/PeopleScreen";
+import SettingsScreen from "./src/Screens/SettingsScreen";
+import VioletScreen from "./src/Screens/VioletScreen";
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+import {setStore} from "./src/shared/utility";
+import rootReducer from "./src/store/reducers";
+import styles from "./src/styles";
+
+class TabIcon extends React.Component {
+  render() {
+    const {iconName, size} = this.props;
+    const color = this.props.focused ? "#222" : "#888";
+    return (<View>
+      <Icon
+        style={{alignSelf: "center", paddingTop: 2}}
+        name={iconName} size={size} color={color}/>
+      <Text style={{
+        ...styles.tabTitle,
+        color: this.props.focused ? "black" : "gray",
+      }}>{this.props.title}</Text>
+    </View>);
+  }
+}
 
 const store = createStore(rootReducer);
 setStore(store);
@@ -93,6 +47,48 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
+        <Router>
+          <Scene key="root" hideNavBar>
+            <Scene
+              key="tabbar" tabs={true} showLabel={false}
+              tabBarStyle={{backgroundColor: "#e8e8e8"}}
+              tabStyle={{backgroundColor: "bbb"}}>
+              <Scene
+                key="chats"
+                iconName="chat" size={30}
+                icon={TabIcon}
+                title="Chats"
+                hideNavBar>
+                <Scene
+                  key="chats"
+                  component={ChatsScreen}
+                  title="Chats"
+                />
+              </Scene>
+              <Scene key="people"
+                iconName="account-multiple" size={30}
+                icon={TabIcon}
+                title="People"
+                hideNavBar>
+                <Scene
+                  key="blue"
+                  component={PeopleScreen}
+                  title="Blue"
+                />
+                <Scene
+                  key="maize"
+                  component={VioletScreen}
+                  title="Maize"
+                />
+              </Scene>
+            </Scene>
+            <Scene
+              key="settings"
+              component={SettingsScreen}
+              title="Settings"/>
+          
+          </Scene>
+        </Router>
       </Provider>
     );
   }
